@@ -1,4 +1,3 @@
-# KonaStrategies
 # Kona-Alpha-Engine: Vectorized High-Frequency Backtester
 
 This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **Kona (K3/APL dialect)**. 
