@@ -68,5 +68,5 @@ z_strat:{[w;tr;p]m:zma[w;p];sd:(zma[w;p*p]-(m*m))^.5
 
 /In this case we are testing this on windows of up to 100 days, with a Z-score threshold of 2
 *a[>a:{(z_strat[x;2;prc];x)}'1_!100]
-/We can check the runtime of the example above (approximately 238ms)
+/We can check the runtime of the example above (approximately 117ms)
 \t *a[>a:{(z_strat[x;2;prc];x)}'1_!100]
