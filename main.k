@@ -11,6 +11,7 @@ r:0,-':_log -1_ prc
 /Non-native definitions
 eul:2.71828182845
 
+
 / =========SECTION 1: MOVING AVERAGE CROSSOVER (TREND FOLLOWING)=========
 
 / =====================================================================
