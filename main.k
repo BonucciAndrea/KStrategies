@@ -2,16 +2,6 @@ eul:2.71828182845 /We must define Euler's number as it is not innately within Ko
 
 / =========SECTION 1: MOVING AVERAGE RELATIVE VALUE STRATEGY=========
 
-/ --- 1.1. DATA INGESTION ---
-
-a:(","\'a:0:"HistDataAPPLE.csv")
-prc:|0,{[k]. 1_ k}'1_(+a)[1]
-r:0,-':_log |1_|prc
-
-/ --- 1.2. MA STRAT EXECUTION ENGINE ---
-
-ma:{[w;x]s:0.0,+\x;n:1+(#x)-w;((w-1)#0),-1_(s[w+!n]-s[!n])*%w} /Comment below
-
 / =====================================================================
 / O(N) VECTORIZED MOVING AVERAGE (PREFIX-SUM ARCHITECTURE)
 / 
@@ -25,9 +15,18 @@ ma:{[w;x]s:0.0,+\x;n:1+(#x)-w;((w-1)#0),-1_(s[w+!n]-s[!n])*%w} /Comment below
 /    lengths match perfectly for downstream vectorized multiplication.
 / =====================================================================
 
+/ --- 1.1. DATA INGESTION ---
+
+a:(","\'a:0:"HistDataAPPLE.csv")
+prc:|0,{[k]. 1_ k}'1_(+a)[1]
+r:0,-':_log |1_|prc
+
+/ --- 1.2. MA STRAT EXECUTION ENGINE ---
+
+ma:{[w;x]s:0.0,+\x;n:1+(#x)-w;((w-1)#0),-1_(s[w+!n]-s[!n])*%w}
 ma_str:{[h1;h2;p]s:-1_0,((ma[h1;p])>ma[h2;p])
 	c:0,0.0005*1=+':s;t:((r*s)-c)
 	100*(eul^+/t)-1}
 
-/ --- 1.3. TIME CHECK ---
-\t {[j]ma_str[j[0];j[1];prc]}',/{[x]x,'1_!x}'1_!20 
+/ --- 1.3. COMBINATION CHECK ---
+*v[>v:{[j](ma_str[j[0];j[1];prc];j[0];j[1])}',/{[x]x,'1_!x}'1_!20]
