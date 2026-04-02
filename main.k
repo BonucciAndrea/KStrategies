@@ -29,7 +29,7 @@ eul:2.71828182845
 
 ma:{[w;x]s:0.0,+\x;n:1+(#x)-w;((w-1)#0),-1_(s[w+!n]-s[!n])*%w}
 ma_str:{[h1;h2;p]s:-1_0,((ma[h1;p])>ma[h2;p])
-		r:0,-':_log -1_ prc;c:0,0.0005*1=+':s
+		r:0,-':_log -1_ p;c:0,0.0005*1=+':s
 		t:((r*s)-c);100*(eul^+/t)-1}
 
 / --- 1.2. COMBINATION CHECK AND BENCHMARK---
