@@ -4,7 +4,6 @@ eul:2.71828182845 /We must define Euler's number as it is not innately within Ko
 
 / =====================================================================
 / O(N) VECTORIZED MOVING AVERAGE (PREFIX-SUM ARCHITECTURE)
-/ 
 / This function bypasses the O(N * W) complexity of standard looping MAs.
 / 1. Prefix-Sum (+\x): Calculates the running total of the array ONCE.
 / 2. Window Isolation (s[w+!n]-s[!n]): Finds the sum of any window by 
