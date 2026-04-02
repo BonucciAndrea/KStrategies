@@ -69,3 +69,10 @@ z_strat:{[w;tr;p]m:zma[w;p];sd:(zma[w;p*p]-(m*m))^.5
 *a[>a:{(z_strat[x;2;prc];x)}'1_!100]
 /We can check the runtime of the example above (approximately 117ms)
 \t *a[>a:{(z_strat[x;2;prc];x)}'1_!100]
+
+/For fun here is another example; where we do the same parameter
+/sweep on window and also we compute it for 8 thresholds
+*b[>b:{[t]*a[>a:{[x](z_strat[x;t;prc];x;t)}'1_!100]}'(.5;1;1.5;2;2.5;3;3.5;4)]
+/Checking the runtime yields approximately 1379ms (for nearly 792 complete 
+/historical backtests on 1249 days worth of data each!)
+\t *b[>b:{[t]*a[>a:{[x](z_strat[x;t;prc];x;t)}'1_!100]}'(.5;1;1.5;2;2.5;3;3.5;4)]
