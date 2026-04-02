@@ -19,7 +19,7 @@ eul:2.71828182845 /We must define Euler's number as it is not innately within Ko
 
 a:(","\'a:0:"HistDataAPPLE.csv")
 prc:|0,{[k]. 1_ k}'1_(+a)[1]
-r:0,-':_log |1_|prc
+r:0,-':_log -1_ prc
 
 / --- 1.2. MA STRAT EXECUTION ENGINE ---
 
