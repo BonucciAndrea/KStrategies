@@ -1,12 +1,11 @@
 / ================KONA-ALPHA-ENGINE: VECTORIZED HIGH-FREQUENCY BACKTESTER================
 
-/ =========SECTION 0: MOVING AVERAGE CROSSOVER (TREND FOLLOWING)=========
+/ =========SECTION 0: DATA INGESTION & GLOBALS=========
 
 / --- 0.1. DATA INGESTION ---
 
 a:(","\'a:0:"HistDataAPPLE.csv")
 prc:|0,{[k]. 1_ k}'1_(+a)[1]
-r:0,-':_log -1_ prc
 
 /Non-native definitions
 eul:2.71828182845
@@ -30,14 +29,14 @@ eul:2.71828182845
 
 ma:{[w;x]s:0.0,+\x;n:1+(#x)-w;((w-1)#0),-1_(s[w+!n]-s[!n])*%w}
 ma_str:{[h1;h2;p]s:-1_0,((ma[h1;p])>ma[h2;p])
-		c:0,0.0005*1=+':s;t:((r*s)-c)
-		100*(eul^+/t)-1}
+		r:0,-':_log -1_ prc;c:0,0.0005*1=+':s
+		t:((r*s)-c);100*(eul^+/t)-1}
 
 / --- 1.2. COMBINATION CHECK AND BENCHMARK---
 
 /In this case we test all the window combinations for pairs of integers up to 20
 *v[>v:{[j](ma_str[j[0];j[1];prc];j[0];j[1])}',/{[x]x,'1_!x}'1_!20]
-/We can check the run time for the example above (approx 237ms)
+/We can check the run time for the example above (approx 197ms)
 \t *v[>v:{[j](ma_str[j[0];j[1];prc];j[0];j[1])}',/{[x]x,'1_!x}'1_!20] 
 
 
