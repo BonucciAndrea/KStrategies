@@ -1,6 +1,6 @@
 eul:2.71828182845 /We must define Euler's number as it is not innately within Kona.
 
-/ =========SECTION 1: MOVING AVERAGE RELATIVE VALUE STRATEGY=========
+/ =========SECTION 1: MOVING AVERAGE CROSSOVER (TREND FOLLOWING)=========
 
 / =====================================================================
 / O(N) VECTORIZED MOVING AVERAGE (PREFIX-SUM ARCHITECTURE)
@@ -29,4 +29,6 @@ ma_str:{[h1;h2;p]s:-1_0,((ma[h1;p])>ma[h2;p])
 	100*(eul^+/t)-1}
 
 / --- 1.3. COMBINATION CHECK ---
+
+/In this case we test all the window combinations for pairs of integers up to 20
 *v[>v:{[j](ma_str[j[0];j[1];prc];j[0];j[1])}',/{[x]x,'1_!x}'1_!20]
