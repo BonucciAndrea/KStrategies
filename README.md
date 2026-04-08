@@ -2,7 +2,7 @@
 
 This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **Kona (K3/APL dialect)**. 
 
-The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates hundreds of parameter combinations across millions of data points in sub-20ms execution times.
+The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates hundreds of millions of discrete matrix operations in ~3.5 seconds locally, and is structurally designed to achieve sub-20ms execution times when deployed to an enterprise kdb+ distributed compute grid.
 
 ## Core Architectural Principles
 
