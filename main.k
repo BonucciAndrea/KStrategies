@@ -61,7 +61,7 @@ ma_str:{[h1;h2;p]s:-1_0,((ma[h1;p])>ma[h2;p])
 zma:{[w;x]s:0.0,+\x;n:1+(#x)-w;((w-1)#0),(s[w+!n]-s[!n])*%w}
 
 z_strat:{[w;tr;p]m:zma[w;p];sd:(zma[w;p*p]-(m*m))^.5
-    	z:((p-m)*%(sd+1e-5))*(m>0);s:-1_ 0,(~z<(-tr))
+    	z:((p-m)*%(sd+10e-4))*(m>0);s:-1_ 0,(~z<(-tr))
 		c:0,0.0005*1=+':s;r:0.0,-':_log p;t:(r*s)-c;100*(eul^+/-1_ t)-1}
 
 / --- 2.2. PARAMETER SWEEP AND BENCHMARK---
@@ -76,7 +76,7 @@ z_strat:{[w;tr;p]m:zma[w;p];sd:(zma[w;p*p]-(m*m))^.5
 /sweep on window and also we compute it for 8 thresholds
 *b[>b:{[t]*a[>a:{[x](z_strat[x;t;prc];x;t)}'1_!100]}'(.5;1;1.5;2;2.5;3;3.5;4)]
 
-/Checking the runtime yields ~1.3s (for nearly 792 complete 
+/Checking the runtime yields ~1.3s (for exactly 792 complete 
 /historical backtests on 1249 days worth of data each!)
 \t *b[>b:{[t]*a[>a:{[x](z_strat[x;t;prc];x;t)}'1_!100]}'(.5;1;1.5;2;2.5;3;3.5;4)]
 
