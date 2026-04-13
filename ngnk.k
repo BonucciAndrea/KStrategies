@@ -1,5 +1,5 @@
 "================NGN/K-ALPHA-ENGINE: VECTORIZED HIGH-FREQUENCY BACKTESTER================"
-a:(","\'a:0:"HistDataAPPLE.csv")
+a:(","\'a:0:"HistDataAPPLE1.csv")
 prc:|0,{[k]. 1_ k}'1_(+a)[1]
 
 "=========SECTION 1: MOVING AVERAGE CROSSOVER (TREND FOLLOWING)========="
@@ -10,6 +10,8 @@ c:0.0,0.0005*1_1=+':s;t:((r*s)-c)
 
 "In this case we test all the window combinations for pairs of integers up to 20."
 *v[>v:{[j](mastr[j[0];j[1];prc];j[0];j[1])}',/{[x]x,'1_!x}'1_!20]
+"Running time"
+\t *v[>v:{[j](mastr[j[0];j[1];prc];j[0];j[1])}',/{[x]x,'1_!x}'1_!20]
 
 
 
@@ -19,12 +21,12 @@ zstrat:{[w;tr;p]m:zma[w;p];sd:%zma[w;p*p]-m*m;z:((p-m)%(sd+1e-5))*(m>0)
 s:-1_ 0,((-tr)>z);c:0,0.0005*1_1=+':s;r:0.0,1_-':`ln p
 t:((r*s)-c);100*(`exp(+/-1_t))-1}
 
-"1D Parameter Sweep: Windows up to 40 days, fixed Oversold threshold of 30"
+"1D Parameter Sweep: Windows up to 100 days, fixed Oversold threshold of 2"
 *a[>a:{(zstrat[x;2;prc];x)}'1_!100]
 "Running time"
 \t *a[>a:{(zstrat[x;2;prc];x)}'1_!100]
 
-"2D Institutional Stress Test: 98 Windows across 14 Distinct Oversold Thresholds"
+"2D Institutional Stress Test: 99 Windows across 8 Distinct Oversold Thresholds"
 *a[>a:,/{(zstrat[x;y;prc];x;y)}'/:[1_!100;.5 1 1.5 2 2.5 3 3.5 4]]
 "Running time"
 \t *a[>a:,/{(zstrat[x;y;prc];x;y)}'/:[1_!100;.5 1 1.5 2 2.5 3 3.5 4]]
