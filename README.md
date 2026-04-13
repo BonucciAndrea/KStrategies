@@ -1,6 +1,6 @@
-# Kona-Alpha-Engine: Vectorized High-Frequency Backtester
+# K-Alpha-Engine: Vectorized High-Frequency Backtester
 
-This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **Kona (K3/APL dialect)**. 
+This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **Kona (K3/APL dialect)** as well as **ngn/k (K6/APL dialect)**. 
 
 The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates tens of millions of discrete matrix operations in ~3.5 seconds locally, and is structurally designed to achieve sub-20ms execution times when deployed to an enterprise kdb+ distributed compute grid.
 
@@ -45,12 +45,12 @@ To find optimal parameter pairs, the repository utilizes a custom grid-search en
 3. **The Sweep:** Maps combinations across the execution function. The function simply compares two pre-existing arrays from memory, applies transaction costs via boolean flip detection, and outputs the final exponentiated PnL. 
 
 ## Usage
-To run the simulations, ensure you have the Kona interpreter installed and configured.
+To run the simulations, ensure you have the Kona and ngn/k interpreters installed and configured.
 Execute the respective strategy files via the command line, passing in your target high-frequency CSV dataset.
 
 ## Performance & Execution Benchmarks
 
-The KONA-ALPHA-ENGINE was stress-tested using a single-threaded CPU environment against a 1,249-day historical dataset (Apple Inc.). The grid searches evaluated multi-dimensional parameter surfaces without utilizing conditional `for` loops or pipeline-stalling memory reallocations. 
+The K-ALPHA-ENGINE was stress-tested using a single-threaded CPU environment against a 1,249-day historical dataset (Apple Inc.). The grid searches evaluated multi-dimensional parameter surfaces without utilizing conditional `for` loops or pipeline-stalling memory reallocations. 
 
 The table below outlines the local execution time compared to the estimated architectural limit when deployed to an institutional distributed compute grid (e.g., kdb+/q or compiled SIMD).
 
