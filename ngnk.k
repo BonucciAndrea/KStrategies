@@ -46,7 +46,7 @@ t:((r*s)-c);100*(`exp(+/-1_t))-1}
 "Running time"
 \t *a[>a:{[x](rsistrat[x;30;prc];x)}'2_!40]
 
-"Checking the runtime for the full multi-dimensional surface sweep."
+"Checking for the full multi-dimensional surface sweep."
 *a[>a:,/{(rsistrat[x;y;prc];x;y)}'/:[1_!100;1 1.5 2 3 4 5 6 7 10 30 31 35 45 50]]
 "Running time"
 \t *a[>a:,/{(rsistrat[x;y;prc];x;y)}'/:[1_!100;1 1.5 2 3 4 5 6 7 10 30 31 35 45 50]]
