@@ -48,18 +48,15 @@ To find optimal parameter pairs, the repository utilizes a custom grid-search en
 To run the simulations, ensure you have the Kona and ngn/k interpreters installed and configured.
 Execute the respective strategy files via the command line, passing in your target high-frequency CSV dataset.
 
-## Performance & Execution Benchmarks
-
-The K-ALPHA-ENGINE was stress-tested using a single-threaded CPU environment against a 1,249-day historical dataset (Apple Inc.). The grid searches evaluated multi-dimensional parameter surfaces without utilizing conditional `for` loops or pipeline-stalling memory reallocations. 
-
 ## 📊 Performance Benchmarks: ngn/k vs. Kona
-The following benchmarks evaluate the performance of identical vectorized logic across 1,249 historical price points (`HistDataAPPLE2.csv`). These metrics illustrate the raw computational velocity of the K-family and the extreme efficiency of the **ngn/k** engine.
+The following benchmarks evaluate the performance of identical vectorized logic across 7,530 historical price points (~30 years of daily data). 
 
 | Strategy Section | Total Operations | ngn/k Time (ms) | Kona Time (ms) | **ngn/k Ops/Sec** | **Kona Ops/Sec** | Delta |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **MA Crossover** | ~2,135,790 | 317 | 967 | **6,737,507** | 2,208,676 | 3.05x |
-| **Z-Score (1D)** | ~2,473,020 | 292 | 881 | **8,469,246** | 2,807,060 | 3.02x |
-| **Z-Score (2D)** | ~19,784,160 | 2,371 | 7,580 | **8,344,226** | 2,610,047 | 3.20x |
-| **RSI (1D)** | ~1,712,370 | 114 | 437 | **15,020,789** | 3,918,466 | 3.83x |
-| **RSI (2D)** | **61,700,000** | 4,049 | 26,772 | **15,238,330** | 2,304,646 | **6.61x** |
-*Note: Total matrix operations are approximations based on the mathematical footprint of the $O(N)$ prefix-sum and boolean masking pathways multiplied by the grid combinations and dataset length.*
+| **MA Crossover** | ~12.7M | 317 | 967 | ~40.1M | ~13.1M | 3.05x |
+| **Z-Score (1D)** | ~15.1M | 292 | 881 | ~51.7M | ~17.1M | 3.02x |
+| **Z-Score (2D)** | ~119.3M | 2,371 | 7,580 | ~50.3M | ~15.7M | 3.20x |
+| **RSI (1D)** | ~10.3M | 114 | 437 | ~90.4M | ~23.6M | 3.83x |
+| **RSI (2D)** | **~371.9M** | 4,049 | 26,772 | **~91.8M** | ~13.9M | **6.61x** |
+
+*Note: Total matrix operations are approximations based on the mathematical footprint of the $O(N)$ prefix-sum and boolean masking pathways multiplied by the grid combinations and the true 30-year dataset length (7,530 days).*
