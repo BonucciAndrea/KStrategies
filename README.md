@@ -52,12 +52,14 @@ Execute the respective strategy files via the command line, passing in your targ
 
 The K-ALPHA-ENGINE was stress-tested using a single-threaded CPU environment against a 1,249-day historical dataset (Apple Inc.). The grid searches evaluated multi-dimensional parameter surfaces without utilizing conditional `for` loops or pipeline-stalling memory reallocations. 
 
-The table below outlines the local execution time compared to the estimated architectural limit when deployed to an institutional distributed compute grid (e.g., kdb+/q or compiled SIMD).
+## 📊 Performance Benchmarks: ngn/k vs. Kona
+The following benchmarks evaluate the performance of identical vectorized logic across 1,249 historical price points (`HistDataAPPLE2.csv`). These metrics illustrate the raw computational velocity of the K-family and the extreme efficiency of the **ngn/k** engine.
 
-| Strategy Engine | Time Complexity | Parameter Grid Size | Total Matrix Operations | Local Single-Thread | Enterprise Grid Est. |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **1. MA Crossover** (Trend) | $O(N)$ Vectorized | 190 independent backtests | ~1.5 Million | **~197 ms** | *< 5 ms* |
-| **2. Z-Score** (Stat Arb) | $O(N)$ Vectorized | 792 independent backtests | ~25.7 Million | **~1.30 s** | *~20 ms* |
-| **3. RSI Oscillator** (Momentum)| $O(N)$ Vectorized | 1,372 independent backtests | ~61.7 Million | **~3.50 s** | *~50 ms* |
-
+| Strategy Section | Total Operations | ngn/k Time (ms) | Kona Time (ms) | **ngn/k Ops/Sec** | **Kona Ops/Sec** | Delta |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **MA Crossover** | ~2,135,790 | 317 | 967 | **6,737,507** | 2,208,676 | 3.05x |
+| **Z-Score (1D)** | ~2,473,020 | 292 | 881 | **8,469,246** | 2,807,060 | 3.02x |
+| **Z-Score (2D)** | ~19,784,160 | 2,371 | 7,580 | **8,344,226** | 2,610,047 | 3.20x |
+| **RSI (1D)** | ~1,712,370 | 114 | 437 | **15,020,789** | 3,918,466 | 3.83x |
+| **RSI (2D)** | **61,700,000** | 4,049 | 26,772 | **15,238,330** | 2,304,646 | **6.61x** |
 *Note: Total matrix operations are approximations based on the mathematical footprint of the $O(N)$ prefix-sum and boolean masking pathways multiplied by the grid combinations and dataset length.*
