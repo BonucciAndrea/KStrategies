@@ -58,9 +58,7 @@ ma_str:{[h1;h2;p]s:-1_0,((ma[h1;p])>ma[h2;p])
 
 / --- 2.1. STATISTICAL EXECUTION ENGINE ---
 
-zma:{[w;x]s:0.0,+\x;n:1+(#x)-w;((w-1)#0),(s[w+!n]-s[!n])*%w}
-
-z_strat:{[w;tr;p]m:zma[w;p];sd:(zma[w;p*p]-(m*m))^.5
+z_strat:{[w;tr;p]m:ma[w;p];sd:(ma[w;p*p]-(m*m))^.5
     	z:((p-m)*%(sd+1e-5))*(m>0);s:-1_ 0,((-tr)>z)
 		c:0,0.0005*1=+':s;r:0.0,-':_log p;t:(r*s)-c;100*(eul^+/-1_ t)-1}
 
@@ -100,10 +98,8 @@ z_strat:{[w;tr;p]m:zma[w;p];sd:(zma[w;p*p]-(m*m))^.5
 
 / --- 3.1. RSI EXECUTION ENGINE ---
 
-rsi_ma:{[w;x]s:0.0,+\x;n:1+(#x)-w;((w-1)#0),(s[w+!n]-s[!n])*%w}
-
 rsi_strat:{[w;tr;p]d:p--1_ (*p),p;u:d*(d>0);dw:(0.0-d)*(0>d)
-        au:rsi_ma[w;u];ad:rsi_ma[w;dw];rs:au*%(ad+10e-4);rsi:100.0-(100.0*%(1.0+rs))
+        au:ma[w;u];ad:ma[w;dw];rs:au*%(ad+10e-4);rsi:100.0-(100.0*%(1.0+rs))
         s:-1_ 0,((tr>rsi)*((au+ad)>0));c:0,0.0005*1=+':s;r:0.0,-':_log p
         t:(r*s)-c;100*(eul^+/-1_ t)-1}
 
