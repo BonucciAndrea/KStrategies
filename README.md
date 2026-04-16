@@ -33,10 +33,6 @@ A mean-reversion engine that assumes price elasticity. It generates signals base
 An implementation of the Relative Strength Index to identify overbought and oversold market conditions.
 * **Mathematical Highlight:** Bypasses conditional `if/else` statements entirely. It separates positive and negative daily returns by multiplying the returns array against a boolean condition mask, enabling lightning-fast calculation of the Average Gain and Average Loss.
 
-### (To be added) Strategy 4: Donchian Channel Breakout (Volatility) 
-A breakout strategy that generates signals when an asset surpasses its $N$-day highest high or lowest low.
-* **Mathematical Highlight:** Demonstrates advanced K-language reduction operators to maintain a sliding-window maximum without iteration.
-
 ---
 
 ## The Grid-Search Execution Engine
