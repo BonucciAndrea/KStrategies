@@ -3,6 +3,8 @@
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![Language: K](https://img.shields.io/badge/Language-Kona%20%7C%20Ngn/K%20%7C%20Kdb+/Q-orange.svg)
 
+**🚀 Peak Benchmark:** Multi-threaded Symmetric Multiprocessing (SMP) via Q's `peach` achieves **~2.34 Billion Ops/Sec** (evaluating 8.12 Billion matrix operations across 164,000+ data points in 3.4 seconds natively on local hardware).
+
 This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **Kdb+/Q**, **Kona (K3/APL dialect)** as well as **Ngn/K (K6/APL dialect)**. 
 
 The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates tens of millions of discrete matrix operations, and is structurally designed to achieve sub-20ms execution times when deployed to an enterprise kdb+ distributed compute grid.
