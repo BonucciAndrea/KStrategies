@@ -1,11 +1,11 @@
 # K-Alpha-Engine: Vectorized High-Frequency Backtester
 
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
-![Language: K](https://img.shields.io/badge/Language-Kona%20%7C%20NGN/K-orange.svg)
+![Language: K](https://img.shields.io/badge/Language-Kona%20%7C%20NGN/K%20%7C%20kdb+/q-orange.svg)
 
-This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **q/Kdb**,**Kona (K3/APL dialect)** as well as **NGN/K (K6/APL dialect)**. 
+This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **kdb+/q**, **Kona (K3/APL dialect)** as well as **NGN/K (K6/APL dialect)**. 
 
-The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates tens of millions of discrete matrix operations in ~3.5 seconds locally, and is structurally designed to achieve sub-20ms execution times when deployed to an enterprise kdb+ distributed compute grid.
+The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates tens of millions of discrete matrix operations, and is structurally designed to achieve sub-20ms execution times when deployed to an enterprise kdb+ distributed compute grid.
 
 ## Core Architectural Principles
 
@@ -47,15 +47,16 @@ To find optimal parameter pairs, the repository utilizes a custom grid-search en
 To run the simulations, ensure you have the Kona and NGN/K interpreters installed and configured.
 Execute the respective strategy files via the command line, passing in your target high-frequency CSV dataset.
 
-## 📊 Performance Benchmarks: NGN/K vs. Kona
-The following benchmarks evaluate the performance of identical vectorized logic across 7,530 historical price points (~30 years of daily data). 
+## 📊 Performance Benchmarks: Enterprise Kona vs. NGN/K vs. kdb+/q
 
-| Strategy Section | Total Operations | NGN/K Time (ms) | Kona Time (ms) | **NGN/K Ops/Sec** | **Kona Ops/Sec** | Delta |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **MA Crossover** | ~12.7M | 317 | 967 | ~40.1M | ~13.1M | 3.05x |
-| **Z-Score (1D)** | ~15.1M | 292 | 881 | ~51.7M | ~17.1M | 3.02x |
-| **Z-Score (2D)** | ~119.3M | 2,371 | 7,580 | ~50.3M | ~15.7M | 3.20x |
-| **RSI (1D)** | ~10.3M | 114 | 437 | ~90.4M | ~23.6M | 3.83x |
-| **RSI (2D)** | **~371.9M** | 4,049 | 26,772 | **~91.8M** | ~13.9M | **6.61x** |
+The following benchmarks evaluate the performance of identical vectorized logic across 7,530 historical price points. By porting the purely array-oriented architecture from raw K into enterprise Q, the execution engine bypasses standard interpreter overhead and leverages highly optimized C-level financial arithmetic.
 
-*Note: Total matrix operations are approximations based on the mathematical footprint of the $O(N)$ prefix-sum and boolean masking pathways multiplied by the grid combinations and the true 30-year dataset length (7,530 days).*
+| Strategy Section | Total Operations | Kona Time (ms) | NGN/K Time (ms) | **kdb+/q Time (ms)** | Kona Ops/Sec | NGN/K Ops/Sec | **kdb+/q Ops/Sec** |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **MA Crossover** | ~12.7M | 967 | 317 | **208** | ~13.1M | ~40.1M | **~61.0M** |
+| **Z-Score (1D)** | ~15.1M | 881 | 292 | **131** | ~17.1M | ~51.7M | **~115.2M** |
+| **Z-Score (2D)** | ~119.3M | 7,580 | 2,371 | **1,001** | ~15.7M | ~50.3M | **~119.1M** |
+| **RSI (1D)** | ~10.3M | 437 | 114 | **8** | ~23.6M | ~90.4M | **~1.28B** |
+| **RSI (2D)** | **~371.9M** | 26,772 | 4,049 | **277** | ~13.9M | **~91.8M** | **~1.34B** |
+
+*Note: The exponential performance leap in the RSI architecture (reaching ~1.34 Billion Ops/Sec) demonstrates kdb+'s extreme efficiency when processing vectorized boolean conditional masks and cumulative divisions over large temporal grids.*
