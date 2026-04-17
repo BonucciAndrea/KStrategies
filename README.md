@@ -44,7 +44,7 @@ To find optimal parameter pairs, the repository utilizes a custom grid-search en
 3. **The Sweep:** Maps combinations across the execution function. The function simply compares two pre-existing arrays from memory, applies transaction costs via boolean flip detection, and outputs the final exponentiated PnL. 
 
 ## Usage
-To run the simulations, ensure you have the Kona and NGN/K interpreters installed and configured.
+To run the simulations, ensure you have Kona, NGN/K, and kdb+/q installed and configured.
 Execute the respective strategy files via the command line, passing in your target high-frequency CSV dataset.
 
 ## 📊 Performance Benchmarks: Enterprise Kona vs. NGN/K vs. kdb+/q
@@ -59,4 +59,4 @@ The following benchmarks evaluate the performance of identical vectorized logic 
 | **RSI (1D)** | ~10.3M | 437 | 114 | **8** | ~23.6M | ~90.4M | **~1.28B** |
 | **RSI (2D)** | **~371.9M** | 26,772 | 4,049 | **277** | ~13.9M | **~91.8M** | **~1.34B** |
 
-*Note: The exponential performance leap in the RSI architecture (reaching ~1.34 Billion Ops/Sec) demonstrates kdb+'s extreme efficiency when processing vectorized boolean conditional masks and cumulative divisions over large temporal grids.*
+*Note: The exponential performance leap in the RSI architecture (reaching ~1.34 Billion Ops/Sec) demonstrates kdb+/q's extreme efficiency when processing vectorized boolean conditional masks and cumulative divisions over large temporal grids.*
