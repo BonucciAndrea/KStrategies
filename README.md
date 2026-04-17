@@ -1,9 +1,9 @@
 # K-Alpha-Engine: Vectorized High-Frequency Backtester
 
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
-![Language: K](https://img.shields.io/badge/Language-Kona%20%7C%20NGN/K%20%7C%20kdb+/q-orange.svg)
+![Language: K](https://img.shields.io/badge/Language-Kona%20%7C%20Ngn/K%20%7C%20Kdb+/Q-orange.svg)
 
-This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **kdb+/q**, **Kona (K3/APL dialect)** as well as **NGN/K (K6/APL dialect)**. 
+This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **Kdb+/Q**, **Kona (K3/APL dialect)** as well as **Ngn/K (K6/APL dialect)**. 
 
 The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates tens of millions of discrete matrix operations, and is structurally designed to achieve sub-20ms execution times when deployed to an enterprise kdb+ distributed compute grid.
 
@@ -44,14 +44,14 @@ To find optimal parameter pairs, the repository utilizes a custom grid-search en
 3. **The Sweep:** Maps combinations across the execution function. The function simply compares two pre-existing arrays from memory, applies transaction costs via boolean flip detection, and outputs the final exponentiated PnL. 
 
 ## Usage
-To run the simulations, ensure you have Kona, NGN/K, and kdb+/q installed and configured.
+To run the simulations, ensure you have Kona, Ngn/K, and Kdb+/Q installed and configured.
 Execute the respective strategy files via the command line, passing in your target high-frequency CSV dataset.
 
-## 📊 Performance Benchmarks: Enterprise Kona vs. NGN/K vs. kdb+/q
+## 📊 Performance Benchmarks: Enterprise Kona vs. Ngn/K vs. Kdb+/q
 
 The following benchmarks evaluate the performance of identical vectorized logic across 7,530 historical price points. By porting the purely array-oriented architecture from raw K into enterprise Q, the execution engine bypasses standard interpreter overhead and leverages highly optimized C-level financial arithmetic.
 
-| Strategy Section | Total Operations | Kona Time (ms) | NGN/K Time (ms) | **kdb+/q Time (ms)** | Kona Ops/Sec | NGN/K Ops/Sec | **kdb+/q Ops/Sec** |
+| Strategy Section | Total Operations | Kona Time (ms) | Ngn/K Time (ms) | **Kdb+/q Time (ms)** | Kona Ops/Sec | Ngn/K Ops/Sec | **Kdb+/q Ops/Sec** |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **MA Crossover** | ~12.7M | 967 | 317 | **208** | ~13.1M | ~40.1M | **~61.0M** |
 | **Z-Score (1D)** | ~15.1M | 881 | 292 | **131** | ~17.1M | ~51.7M | **~115.2M** |
@@ -59,4 +59,4 @@ The following benchmarks evaluate the performance of identical vectorized logic 
 | **RSI (1D)** | ~10.3M | 437 | 114 | **8** | ~23.6M | ~90.4M | **~1.28B** |
 | **RSI (2D)** | **~371.9M** | 26,772 | 4,049 | **277** | ~13.9M | **~91.8M** | **~1.34B** |
 
-*Note: The exponential performance leap in the RSI architecture (reaching ~1.34 Billion Ops/Sec) demonstrates kdb+/q's extreme efficiency when processing vectorized boolean conditional masks and cumulative divisions over large temporal grids.*
+*Note: The exponential performance leap in the RSI architecture (reaching ~1.34 Billion Ops/Sec) demonstrates Kdb+/Q's extreme efficiency when processing vectorized boolean conditional masks and cumulative divisions over large temporal grids.*
