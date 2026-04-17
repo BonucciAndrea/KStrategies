@@ -3,7 +3,7 @@
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![Language: K](https://img.shields.io/badge/Language-Kona%20%7C%20NGN/K-orange.svg)
 
-This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **Kona (K3/APL dialect)** as well as **NGN/K (K6/APL dialect)**. 
+This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **q/Kdb**,**Kona (K3/APL dialect)** as well as **NGN/K (K6/APL dialect)**. 
 
 The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates tens of millions of discrete matrix operations in ~3.5 seconds locally, and is structurally designed to achieve sub-20ms execution times when deployed to an enterprise kdb+ distributed compute grid.
 
