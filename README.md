@@ -49,9 +49,9 @@ Execute the respective strategy files via the command line, passing in your targ
 
 ## 📊 Performance Benchmarks: Enterprise Kona vs. Ngn/K vs. Kdb+/q
 
-The following benchmarks evaluate the performance of identical vectorized logic across 7,530 historical price points. By porting the purely array-oriented architecture from raw K into enterprise Q, the execution engine bypasses standard interpreter overhead and leverages highly optimized C-level financial arithmetic.
+The following benchmarks evaluate the performance of identical vectorized logic. By porting the purely array-oriented architecture from raw K into enterprise Q, the execution engine bypasses standard interpreter overhead and leverages highly optimized C-level financial arithmetic.
 
-| Strategy Section | Total Operations | Kona Time (ms) | Ngn/K Time (ms) | **Kdb+/q Time (ms)** | Kona Ops/Sec | Ngn/K Ops/Sec | **Kdb+/q Ops/Sec** |
+| Strategy Section | Total Operations | Kona Time (ms) | Ngn/K Time (ms) | **Kdb+/Q Time (ms)** | Kona Ops/Sec | Ngn/K Ops/Sec | **Kdb+/Q Ops/Sec** |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **MA Crossover** | ~12.7M | 967 | 317 | **208** | ~13.1M | ~40.1M | **~61.0M** |
 | **Z-Score (1D)** | ~15.1M | 881 | 292 | **131** | ~17.1M | ~51.7M | **~115.2M** |
@@ -59,4 +59,11 @@ The following benchmarks evaluate the performance of identical vectorized logic 
 | **RSI (1D)** | ~10.3M | 437 | 114 | **8** | ~23.6M | ~90.4M | **~1.28B** |
 | **RSI (2D)** | **~371.9M** | 26,772 | 4,049 | **277** | ~13.9M | **~91.8M** | **~1.34B** |
 
-*Note: The exponential performance leap in the RSI architecture (reaching ~1.34 Billion Ops/Sec) demonstrates Kdb+/Q's extreme efficiency when processing vectorized boolean conditional masks and cumulative divisions over large temporal grids.*
+*Note: The exponential performance leap in the RSI architecture (reaching ~1.34 Billion Ops/Sec on a single thread) demonstrates Kdb+/Q's extreme efficiency when processing vectorized boolean conditional masks and cumulative divisions over large temporal grids.*
+
+### 🚀 Multi-Threading Limit Test (Symmetric Multiprocessing)
+To test the absolute limits of the underlying C-architecture, the data was scaled up to an institutional-grade dataset of **164,405 historical price points**, generating over 8.1 Billion matrix operations for the 2D parameter sweeps. 
+
+By utilizing Q's `peach` (Parallel Each) command and allocating 10 secondary CPU threads (`-s 10`), the workload was distributed across the CPU's L1/L2 caches, yielding extreme execution speeds:
+* **Z-Score 2D (2.60 Billion Operations):** 4,624 ms **(~563.3 Million Ops/Sec)**
+* **RSI 2D (8.12 Billion Operations):** 3,471 ms **(~2.34 Billion Ops/Sec)**
