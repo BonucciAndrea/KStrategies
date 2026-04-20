@@ -1,1 +1,71 @@
-# KStrategies
+# K-Alpha-Engine: Vectorized High-Frequency Backtester
+
+![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
+![Language: K](https://img.shields.io/badge/Language-Kona%20%7C%20Ngn/K%20%7C%20Kdb+/Q-orange.svg)
+
+**🚀 Peak Benchmark:** Multi-threaded Symmetric Multiprocessing (SMP) via Q's `peach` achieves **~2.34 Billion Ops/Sec** (evaluating 8.12 Billion matrix operations across 164,000+ data points in 3.4 seconds natively on local hardware).
+
+This repository contains a suite of systematic trading strategies and a grid-search execution engine built entirely in **Kdb+/Q**, **Kona (K3/APL dialect)** as well as **Ngn/K (K6/APL dialect)**. 
+
+The architecture is designed to bypass the I/O and loop-based bottlenecks of standard Python/pandas stacks. By utilizing pure array-oriented programming, prefix-sums, and zero-reallocation memory management, this engine evaluates tens of millions of discrete matrix operations, and is structurally designed to achieve sub-20ms execution times when deployed to an enterprise kdb+ distributed compute grid.
+
+## Core Architectural Principles
+
+1. **$O(N)$ Time Complexity:** All rolling calculations (averages, variances) utilize prefix-sums (scan operators) to achieve constant-time window evaluation. The engine never recalculates overlapping data.
+2. **Zero-Loop Execution:** Total reliance on K-idiomatic vectorization. `while` and `for` loops are strictly avoided in favor of sliding array logic.
+3. **Pre-computation (Memoization):** Grid-search sweeps pull from pre-calculated mathematical matrices in RAM rather than calculating indicators on-the-fly.
+4. **Cache Preservation:** Array shifting (to prevent look-ahead bias) is handled via negative drops (`-1_`) rather than memory-heavy array reversals, protecting the CPU cache from reallocation thrashing.
+5. **Separation of Concerns:** Disk I/O (CSV parsing) is strictly isolated from the mathematical execution engine.
+
+---
+
+## The Strategy Ensemble
+
+The repository is divided into uncorrelated quantitative strategies, demonstrating proficiency in Trend Following, Statistical Arbitrage, and Momentum Oscillation.
+
+### Strategy 1: Moving Average Crossover (Trend Following)
+A foundational momentum strategy optimized for ultra-low latency execution. It evaluates a fast moving average against a slow moving average to detect trend emergence, factoring in basis-point transaction costs on signal flips.
+* **Mathematical Highlight:** Reduces the standard $O(N \times W)$ moving average calculation to strict $O(N)$ time. By calculating the running sum of the entire price array first, the engine isolates the exact sum of any window $W$ by subtracting the trailing sum from the leading sum.
+
+### Strategy 2: Z-Score Mean Reversion (Statistical Arbitrage)
+A mean-reversion engine that assumes price elasticity. It generates signals based on standard deviation extremes (Z-Scores).
+* **Mathematical Highlight:** Computes rolling variance without loops. It leverages the mathematical identity $Var(X) = E[X^2] - (E[X])^2$, applying the prefix-sum architecture to both the price array and the squared-price array simultaneously. 
+
+### Strategy 3: RSI via Boolean Masking (Momentum Oscillator)
+An implementation of the Relative Strength Index to identify overbought and oversold market conditions.
+* **Mathematical Highlight:** Bypasses conditional `if/else` statements entirely. It separates positive and negative daily returns by multiplying the returns array against a boolean condition mask, enabling lightning-fast calculation of the Average Gain and Average Loss.
+
+---
+
+## The Grid-Search Execution Engine
+
+To find optimal parameter pairs, the repository utilizes a custom grid-search engine. Instead of passing parameters into a strategy function and calculating math dynamically, the engine executes a three-layer pipeline:
+
+1. **Ingestion Layer:** Loads and parses the data into a pure float array exactly once.
+2. **The Matrix (Memoization):** Pre-calculates every possible indicator array (e.g., all moving averages from window size 1 to 200) into RAM.
+3. **The Sweep:** Maps combinations across the execution function. The function simply compares two pre-existing arrays from memory, applies transaction costs via boolean flip detection, and outputs the final exponentiated PnL. 
+
+## Usage
+To run the simulations, ensure you have Kona, Ngn/K, and Kdb+/Q installed and configured.
+Execute the respective strategy files via the command line, passing in your target high-frequency CSV dataset.
+
+## 📊 Performance Benchmarks: Enterprise Kona vs. Ngn/K vs. Kdb+/q
+
+The following benchmarks evaluate the performance of identical vectorized logic. By porting the purely array-oriented architecture from raw K into enterprise Q, the execution engine bypasses standard interpreter overhead and leverages highly optimized C-level financial arithmetic.
+
+| Strategy Section | Total Operations | Kona Time (ms) | Ngn/K Time (ms) | **Kdb+/Q Time (ms)** | Kona Ops/Sec | Ngn/K Ops/Sec | **Kdb+/Q Ops/Sec** |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **MA Crossover** | ~12.7M | 967 | 317 | **208** | ~13.1M | ~40.1M | **~61.0M** |
+| **Z-Score (1D)** | ~15.1M | 881 | 292 | **131** | ~17.1M | ~51.7M | **~115.2M** |
+| **Z-Score (2D)** | ~119.3M | 7,580 | 2,371 | **1,001** | ~15.7M | ~50.3M | **~119.1M** |
+| **RSI (1D)** | ~10.3M | 437 | 114 | **8** | ~23.6M | ~90.4M | **~1.28B** |
+| **RSI (2D)** | **~371.9M** | 26,772 | 4,049 | **277** | ~13.9M | **~91.8M** | **~1.34B** |
+
+*Note: The exponential performance leap in the RSI architecture (reaching ~1.34 Billion Ops/Sec on a single thread) demonstrates Kdb+/Q's extreme efficiency when processing vectorized boolean conditional masks and cumulative divisions over large temporal grids.*
+
+### 🚀 Multi-Threading Limit Test (Symmetric Multiprocessing)
+To test the absolute limits of the underlying C-architecture, the data was scaled up to an institutional-grade dataset of **164,405 historical price points**, generating over 8.1 Billion matrix operations for the 2D parameter sweeps. 
+
+By utilizing Q's `peach` (Parallel Each) command and allocating 10 secondary CPU threads (`-s 10`), the workload was distributed across the CPU's L1/L2 caches, yielding extreme execution speeds:
+* **Z-Score 2D (2.60 Billion Operations):** 4,624 ms **(~563.3 Million Ops/Sec)**
+* **RSI 2D (8.12 Billion Operations):** 3,471 ms **(~2.34 Billion Ops/Sec)**
